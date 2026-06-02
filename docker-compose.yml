@@ -26,6 +26,12 @@ services:
       - DB_CONNECTION_URI=postgresql+psycopg://honcho:honcho@database:5432/honcho
       - CACHE_URL=redis://redis:6379/0?suppress=true
       - CACHE_ENABLED=true
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.honcho.rule=Host(`memory.services.agonmmers.com`)"
+      - "traefik.http.routers.honcho.entrypoints=websecure"
+      - "traefik.http.routers.honcho.tls.certresolver=letsencrypt"
+      - "traefik.http.services.honcho.loadbalancer.server.port=8000"
     volumes:
       - ./docker/entrypoint.sh:/app/docker/entrypoint.sh:ro
     restart: unless-stopped
